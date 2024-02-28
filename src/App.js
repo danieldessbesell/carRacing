@@ -19,7 +19,7 @@ function App() {
     <Header themeSelect={themeSelect} menuTheme={true} onClickMenuTheme={()=>{ handleChangeTheme(themeSelect, setThemeSelect); }} />
 
 
-    <CarRacing />
+    <CarRacing color={styles[themeSelect]}/>
 
     {/* <div style={{marginTop: '8px', textAlign: 'center'}}>
       <MenuButton
