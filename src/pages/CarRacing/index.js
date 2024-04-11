@@ -8,7 +8,12 @@ export default function CarRacing({color}) {
   });
   const [trackControl, setTrackControl] = useState({
     type: 0,
+    speed: 1,
+    wallFrame: 0,
   })
+  const [gameControl, setGameControl] = useState({
+    status: 'play'
+  });
   const isMobile = window.matchMedia('(max-width: 700px)').matches;
 
   const numberOfSquares = 20;
@@ -45,7 +50,6 @@ export default function CarRacing({color}) {
     } 
   }
 
-  
   useEffect(()=>{
     setCarControl({
       ...carControl,
@@ -61,6 +65,21 @@ export default function CarRacing({color}) {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [handleKeyDown]);
+
+  useEffect(()=>{
+    const speedGame = setInterval(() => {
+      // if (live) {
+        setTrackControl({
+          ...trackControl,
+          wallFrame: (trackControl.wallFrame > 0 ? trackControl.wallFrame - 1 : 20 )
+        })        
+      // }
+    }, 50);
+
+    return () => {
+      clearInterval(speedGame);
+    };
+  },[gameControl,trackControl])
  
   return (
     <div
@@ -71,7 +90,8 @@ export default function CarRacing({color}) {
     >
       {/* <h2>TO-DO</h2>
       <hr />
-      <li>criar movimentação da pista</li>
+      <li>Status do Jogo</li>
+      <li>Menu Start e Pause</li>
       <li>criar "boots"</li>
       <li>criar impacto</li>
       <li>manipulação de velocidade conforme passa de fase</li> */}
@@ -90,8 +110,8 @@ export default function CarRacing({color}) {
         <g id="ClassicMode">
           <rect id="background" width="360" height="600" fill={color.bg1}/>
           
-          <Edge color={color} side="left" />
-          <Edge color={color} side="right" />
+          <Edge color={color} wallFail={trackControl.wallFrame} side="left" />
+          <Edge color={color} wallFail={trackControl.wallFrame} side="right" />
 
           <ClassicCar
             x={carControl?.x}
