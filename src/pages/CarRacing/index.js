@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ClassicCar from "../../components/ClassicCar";
 import Edge from "../../components/Edge";
+import PlayIcon from "../../SVG/PlayIcon";
+import PauseIcon from "../../SVG/PauseIcon";
 
 export default function CarRacing({color}) {
   const [carControl, setCarControl] = useState({
@@ -12,7 +14,7 @@ export default function CarRacing({color}) {
     wallFrame: 0,
   })
   const [gameControl, setGameControl] = useState({
-    status: 'play'
+    play: false
   });
   const isMobile = window.matchMedia('(max-width: 700px)').matches;
 
@@ -68,12 +70,12 @@ export default function CarRacing({color}) {
 
   useEffect(()=>{
     const speedGame = setInterval(() => {
-      // if (live) {
+       if (gameControl.play) {
         setTrackControl({
           ...trackControl,
           wallFrame: (trackControl.wallFrame > 0 ? trackControl.wallFrame - 1 : 20 )
         })        
-      // }
+       }
     }, 50);
 
     return () => {
@@ -85,7 +87,8 @@ export default function CarRacing({color}) {
     <div
       style={{
         boxSizing: 'border-box',
-        textAlign: 'center'
+        textAlign: 'center',
+        position: "relative"
       }}
     >
       {/* <h2>TO-DO</h2>
@@ -145,7 +148,42 @@ export default function CarRacing({color}) {
         </button>
       </div>
 
-      
+      {(!gameControl.play) && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '30%',
+            left: '40%'
+          }}
+        >
+          <button
+            onClick={()=> setGameControl({...gameControl, play: true})}
+            style={{
+              backgroundColor: 'transparent'
+            }}
+          >
+            <PlayIcon color={color.fontColor} size={100}/>
+          </button>
+        </div>
+      )}
+      {(gameControl.play) && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '5%',
+            right: '40%'
+          }}
+        >
+          <button
+            onClick={()=> setGameControl({...gameControl, play: false})}
+            style={{
+              backgroundColor: 'transparent'
+            }}
+          >
+            <PauseIcon color={color.fontColor} size={100}/>
+          </button>
+        </div>
+      )}
 
       
     </div>
